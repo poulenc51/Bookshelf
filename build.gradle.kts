@@ -7,7 +7,7 @@ plugins {
 	kotlin("plugin.spring") version "1.9.22"
 }
 
-group = "com.quocard"
+group = "com.api"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -19,8 +19,11 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	runtimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
