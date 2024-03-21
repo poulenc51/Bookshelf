@@ -1,6 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import nu.studer.gradle.jooq.JooqExtension
 import nu.studer.gradle.jooq.JooqEdition
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	id("org.springframework.boot") version "3.2.3"
@@ -14,7 +13,7 @@ group = "com.api"
 version = "0.0.1-SNAPSHOT"
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -22,40 +21,34 @@ repositories {
 }
 
 dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-jooq")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jooq:jooq")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	// jOOQ
+	jooqGenerator("com.h2database:h2")
+	jooqGenerator("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
 }
 
-tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs += "-Xjsr305=strict"
-		jvmTarget = "21"
-	}
-}
-
-tasks.withType<Test> {
-	useJUnitPlatform()
-}
-
-configure<nu.studer.gradle.jooq.JooqExtension> {
-	version.set("3.13.1") // 使用するjOOQのライブラリのバージョン
-	edition.set(JooqEdition.OSS)
+jooq {
+	version="3.16.23"
+	edition=JooqEdition.OSS
 	configurations {
-		create("main") {  // ここでは「sample("main") {」の代わりに「create("main") {」を使用します
+		create("main") {
 			jooqConfiguration.apply {
 				jdbc.apply {
 					driver = "org.h2.Driver"
-					url = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"
+					url = "jdbc:h2:mem:testdb"
 					user = "sa"
 					password = ""
 				}
 				generator.apply {
-					name = "org.jooq.codegen.DefaultGenerator"
+					name = "org.jooq.codegen.KotlinGenerator"
 					database.apply {
 						name = "org.jooq.meta.h2.H2Database"
 						includes = ".*"
@@ -66,7 +59,7 @@ configure<nu.studer.gradle.jooq.JooqExtension> {
 						isTables = true
 					}
 					target.apply {
-						packageName = "com.api.bookshelf.jooq"
+						packageName = "com.example.jooq.generated"
 						directory = "src/main/java"
 					}
 				}
@@ -74,3 +67,16 @@ configure<nu.studer.gradle.jooq.JooqExtension> {
 		}
 	}
 }
+
+tasks.withType<KotlinCompile> {
+	kotlinOptions {
+		freeCompilerArgs += "-Xjsr305=strict"
+		jvmTarget = "17"
+	}
+}
+
+tasks.withType<Test> {
+	useJUnitPlatform()
+}
+
+
