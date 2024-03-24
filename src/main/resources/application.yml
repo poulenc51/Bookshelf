@@ -4,7 +4,17 @@ spring:
 
   # H2 Database
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+    url: jdbc:h2:file:./build/h2/testdb;
     driver-class-name: org.h2.Driver
     username: sa
     password:
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+      enabled: true
+  h2:
+    console:
+      enabled: true

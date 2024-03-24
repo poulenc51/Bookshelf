@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "3.2.3"
 	id("io.spring.dependency-management") version "1.1.4"
-	id("nu.studer.jooq") version "9.0"
+	id("nu.studer.jooq") version "8.0"
 	kotlin("jvm") version "1.9.22"
 	kotlin("plugin.spring") version "1.9.22"
 }
@@ -13,7 +13,7 @@ group = "com.api"
 version = "0.0.1-SNAPSHOT"
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
@@ -36,14 +36,14 @@ dependencies {
 }
 
 jooq {
-	version="3.16.23"
-	edition=JooqEdition.OSS
+	version.set("3.18.13")
+	edition.set(JooqEdition.OSS)
 	configurations {
 		create("main") {
 			jooqConfiguration.apply {
 				jdbc.apply {
 					driver = "org.h2.Driver"
-					url = "jdbc:h2:mem:testdb"
+					url = "jdbc:h2:file:./build/h2/testdb;IFEXISTS=TRUE"
 					user = "sa"
 					password = ""
 				}
@@ -51,16 +51,19 @@ jooq {
 					name = "org.jooq.codegen.KotlinGenerator"
 					database.apply {
 						name = "org.jooq.meta.h2.H2Database"
-						includes = ".*"
 						inputSchema = "PUBLIC"
+						includes = ".*"
 					}
 					generate.apply {
 						isDeprecated = false
+						isRecords = true
 						isTables = true
+						isImmutablePojos = true
+						isFluentSetters = true
 					}
 					target.apply {
-						packageName = "com.example.jooq.generated"
-						directory = "src/main/java"
+						packageName = "org.jooq.h2.generated"
+						directory = "build/generated-sources/jooq/db"
 					}
 				}
 			}
@@ -71,7 +74,7 @@ jooq {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs += "-Xjsr305=strict"
-		jvmTarget = "17"
+		jvmTarget = "21"
 	}
 }
 
@@ -79,4 +82,8 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
-
+tasks.named("generateJooq").configure {
+	if (!file("./build/h2/testdb.mv.db").exists()) {
+		enabled = false
+	}
+}
