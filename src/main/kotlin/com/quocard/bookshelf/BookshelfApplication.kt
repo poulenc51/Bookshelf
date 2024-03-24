@@ -1,4 +1,4 @@
-package com.api.bookshelf
+package com.quocard.bookshelf
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

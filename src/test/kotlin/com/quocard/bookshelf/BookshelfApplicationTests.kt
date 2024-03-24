@@ -1,4 +1,4 @@
-package com.api.bookshelf
+package com.quocard.bookshelf
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
