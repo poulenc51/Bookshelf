@@ -16,30 +16,19 @@ import java.time.LocalDate
 class BookService(private val bookRepository: BookRepository) {
 
     fun findBooksByNotDeleted(): BookListDto {
-        return BookListDto(
-            bookList = bookRepository.findAllByNotDeleted().map { book: Book ->
-                BookDto(
-                    id = book.id,
-                    title = book.title,
-                    authorId = book.authorId,
-                    publicationDate = book.publicationDate
-                )
-            }
-        )
+        return BookListDto(bookList = bookRepository.findAllByNotDeleted().map { book: Book ->
+            BookDto(
+                id = book.id, title = book.title, authorId = book.authorId, publicationDate = book.publicationDate
+            )
+        })
     }
 
-    fun findBooksByAuthorIdAndNotDeleted(authorId: Int): BookListDto{
-        return BookListDto(
-            bookList = bookRepository.findAllByAuthorIdAndNotDeleted(authorId).map {
-                book: Book ->
-                    BookDto(
-                        id = book.id,
-                        title = book.title,
-                        authorId = book.authorId,
-                        publicationDate = book.publicationDate
-                    )
-            }
-        )
+    fun findBooksByAuthorIdAndNotDeleted(authorId: Int): BookListDto {
+        return BookListDto(bookList = bookRepository.findAllByAuthorIdAndNotDeleted(authorId).map { book: Book ->
+            BookDto(
+                id = book.id, title = book.title, authorId = book.authorId, publicationDate = book.publicationDate
+            )
+        })
     }
 
     fun addBook(addBookDto: AddBookDto) {

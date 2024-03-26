@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -30,9 +29,10 @@ class BookController(private val bookService: BookService) {
     }
 
     @PostMapping("/add")
-    fun addBook(@RequestBody @Validated addBookDto: AddBookDto, bindingResult: BindingResult
+    fun addBook(
+        @RequestBody @Validated addBookDto: AddBookDto, bindingResult: BindingResult
     ): String {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return bindingResult.allErrors.toString()
         }
         bookService.addBook(addBookDto)
@@ -42,7 +42,7 @@ class BookController(private val bookService: BookService) {
 
     @PostMapping("/update")
     fun updateBook(@RequestBody @Validated updateBookDto: UpdateBookDto, bindingResult: BindingResult): String {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return bindingResult.allErrors.toString()
         }
         bookService.updateBook(updateBookDto)
@@ -52,7 +52,7 @@ class BookController(private val bookService: BookService) {
 
     @PostMapping("/delete")
     fun deleteBook(@RequestBody @Validated deleteBookDto: DeleteBookDto, bindingResult: BindingResult): String {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return bindingResult.allErrors.toString()
         }
         bookService.deleteBook(deleteBookDto)
