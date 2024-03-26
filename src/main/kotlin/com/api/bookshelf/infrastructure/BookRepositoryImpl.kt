@@ -15,13 +15,13 @@ private const val `NOT DELETED`: Boolean = Constants.Sql.NotDeleted
 class BookRepositoryImpl(
     private val dslContext: DSLContext
 ) : BookRepository {
-    override fun findById(id: Int): Book {
+    override fun findById(id: Int): Book? {
         return dslContext
             .select()
             .from(BOOK)
             .where(BOOK.ID.eq(id))
             .and(BOOK.IS_DELETED.eq(`NOT DELETED`))
-            .fetchOne()!!.map { toModel(it) }
+            .fetchOne()?.map { toModel(it) }
     }
 
     override fun findByKeyword(keyword: String): List<Book> {

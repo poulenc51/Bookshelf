@@ -16,13 +16,12 @@ class AuthorService(private val authorRepository: AuthorRepository) {
 
     fun findAuthorById(id: Int): AuthorDto? {
         val author = authorRepository.findById(id)
-        if(author != null) {
-            return AuthorDto(
+        return if (author != null) {
+            AuthorDto(
                 id = author.id, name = author.name, description = author.description
             )
-        }
-        else {
-            return null
+        } else {
+            null
         }
     }
 
@@ -43,7 +42,7 @@ class AuthorService(private val authorRepository: AuthorRepository) {
     }
 
     fun addAuthor(addAuthorDto: AddAuthorDto) {
-        authorRepository.saveBook(
+        authorRepository.saveAuthor(
             AuthorRecord(
                 name = addAuthorDto.name,
                 description = addAuthorDto.description
@@ -52,7 +51,7 @@ class AuthorService(private val authorRepository: AuthorRepository) {
     }
 
     fun updateBook(updateAuthorDto: UpdateAuthorDto) {
-        authorRepository.saveBook(
+        authorRepository.saveAuthor(
             AuthorRecord(
                 id = updateAuthorDto.id,
                 name = updateAuthorDto.name,
@@ -65,7 +64,7 @@ class AuthorService(private val authorRepository: AuthorRepository) {
     fun deleteAuthor(deleteAuthorDto: DeleteAuthorDto) {
         val author = authorRepository.findById(deleteAuthorDto.id)
         if (author != null) {
-            authorRepository.saveBook(
+            authorRepository.saveAuthor(
                 AuthorRecord(
                     id = deleteAuthorDto.id,
                     name = author.name,

@@ -12,5 +12,5 @@ interface AuthorRepository {
     fun findAllByNotDeleted(): List<Author>
 
 
-    fun saveBook(authorRecord: AuthorRecord)
+    fun saveAuthor(authorRecord: AuthorRecord)
 }

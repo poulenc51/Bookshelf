@@ -6,7 +6,7 @@ import java.time.LocalDate
 
 interface BookRepository {
 
-    fun findById(id: Int): Book
+    fun findById(id: Int): Book?
 
     fun findByKeyword(keyword: String): List<Book>
 

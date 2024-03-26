@@ -60,7 +60,6 @@ class FindByIdTest {
 
         val result = authorRepository.findById(authorId)
 
-        // アサーション
         assertThat(result).isNull()
     }
 

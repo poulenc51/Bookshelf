@@ -18,7 +18,7 @@ private const val `IS DELETED`: Boolean = com.api.bookshelf.constants.Constants.
 @SpringBootTest
 @Import(AuthorRepositoryImpl::class)
 @ActiveProfiles("test")
-class SaveBookTest {
+class SaveAuthorTest {
 
     @Autowired
     private lateinit var dslContext: DSLContext
@@ -48,10 +48,10 @@ class SaveBookTest {
 
         val newAuthor = AuthorRecord(null, "New Author", "New Description")
 
-        authorRepository.saveBook(newAuthor)
+        authorRepository.saveAuthor(newAuthor)
 
         val insertedRecord = dslContext.selectFrom(AUTHOR)
-            .where(AUTHOR.NAME.eq("New Author"))
+            .where(AUTHOR.ID.eq(5))
             .fetchOne()
 
         assertThat(insertedRecord).isNotNull
@@ -67,7 +67,7 @@ class SaveBookTest {
 
         val existingAuthor = AuthorRecord(1, "Existing Author", "Updated Description", `NOT DELETED`)
 
-        authorRepository.saveBook(existingAuthor)
+        authorRepository.saveAuthor(existingAuthor)
 
         val updatedRecord = dslContext.selectFrom(AUTHOR)
             .where(AUTHOR.ID.eq(1))
@@ -86,7 +86,7 @@ class SaveBookTest {
 
         val deletingAuthor = AuthorRecord(1, "Deleting Author", "Deleting Description", `IS DELETED`)
 
-        authorRepository.saveBook(deletingAuthor)
+        authorRepository.saveAuthor(deletingAuthor)
 
         val deleteRecord = dslContext.selectFrom(AUTHOR)
             .where(AUTHOR.ID.eq(1))

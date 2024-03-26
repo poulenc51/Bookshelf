@@ -41,7 +41,7 @@ class AuthorRepositoryImpl(
             .fetch().map { toModel(it) }
     }
 
-    override fun saveBook(authorRecord: AuthorRecord) {
+    override fun saveAuthor(authorRecord: AuthorRecord) {
         if (authorRecord.id == null) {
             // 新しいレコードの場合はINSERT
             dslContext.insertInto(AUTHOR)
