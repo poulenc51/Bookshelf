@@ -20,7 +20,17 @@ class BookRepositoryImpl(
             .select()
             .from(BOOK)
             .where(BOOK.ID.eq(id))
+            .and(BOOK.IS_DELETED.eq(`NOT DELETED`))
             .fetchOne()!!.map { toModel(it) }
+    }
+
+    override fun findByKeyword(keyword: String): List<Book> {
+        return dslContext
+            .select()
+            .from(BOOK)
+            .where(BOOK.TITLE.eq("%$keyword%"))
+            .and(BOOK.IS_DELETED.eq(`NOT DELETED`))
+            .fetch().map { toModel(it) }
     }
 
     override fun findAllByNotDeleted(): List<Book> {

@@ -8,6 +8,8 @@ interface BookRepository {
 
     fun findById(id: Int): Book
 
+    fun findByKeyword(keyword: String): List<Book>
+
     fun findAllByNotDeleted(): List<Book>
 
     fun findAllByAuthorIdAndNotDeleted(id: Int): List<Book>

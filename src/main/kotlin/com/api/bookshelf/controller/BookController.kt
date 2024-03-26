@@ -5,6 +5,7 @@ import com.api.bookshelf.dto.request.DeleteBookDto
 import com.api.bookshelf.dto.request.UpdateBookDto
 import com.api.bookshelf.dto.response.BookListDto
 import com.api.bookshelf.service.BookService
+import jakarta.validation.constraints.NotBlank
 import org.springframework.validation.BindingResult
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,6 +22,11 @@ class BookController(private val bookService: BookService) {
     @GetMapping("/")
     fun bookList(): BookListDto {
         return bookService.findBooksByNotDeleted()
+    }
+
+    @GetMapping("/{keyword}")
+    fun bookListByKeyword(@PathVariable @Validated @NotBlank(message = "キーワードの入力は必須です") keyword: String): BookListDto {
+        return bookService.findBooksByKeyword(keyword)
     }
 
     @GetMapping("/{authorId}")
