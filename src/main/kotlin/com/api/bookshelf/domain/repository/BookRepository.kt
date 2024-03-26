@@ -1,10 +1,16 @@
 package com.api.bookshelf.domain.repository
 
 import com.api.bookshelf.domain.model.Book
+import org.jooq.postgresql.generated.tables.records.BookRecord
 import java.time.LocalDate
 
 interface BookRepository {
+
+    fun findById(id: Int): Book
+
     fun findAllByNotDeleted(): List<Book>
 
-    fun addBook(title: String, authorId: Int, publicationDate: LocalDate)
+    fun findAllByAuthorIdAndNotDeleted(id: Int): List<Book>
+
+    fun saveBook(bookRecord: BookRecord)
 }

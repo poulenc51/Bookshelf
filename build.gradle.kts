@@ -38,10 +38,11 @@ dependencies {
 }
 
 jooq {
-	version.set("3.18.13")
+	version.set("3.17.22")
 	edition.set(JooqEdition.OSS)
 	configurations {
 		create("main") {
+			generateSchemaSourceOnCompilation.set(true)
 			jooqConfiguration.apply {
 				jdbc.apply {
 					url = "jdbc:postgresql://localhost:5432/bookshelf"

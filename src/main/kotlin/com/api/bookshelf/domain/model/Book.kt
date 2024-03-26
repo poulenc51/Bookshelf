@@ -6,5 +6,6 @@ data class Book(
     val id: Int,
     val title: String,
     val authorId: Int,
-    val publicationDate: LocalDate
+    val publicationDate: LocalDate,
+    val isDeleted: Boolean
 )
