@@ -9,7 +9,7 @@ import org.jooq.postgresql.generated.tables.Book.Companion.BOOK
 import org.jooq.postgresql.generated.tables.records.BookRecord
 import org.springframework.stereotype.Repository
 
-const val `NOT DELETED`: Boolean = Constants.Sql.NotDeleted
+private const val `NOT DELETED`: Boolean = Constants.Sql.NotDeleted
 
 @Repository
 class BookRepositoryImpl(
