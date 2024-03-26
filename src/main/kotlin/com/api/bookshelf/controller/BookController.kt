@@ -24,8 +24,8 @@ class BookController(private val bookService: BookService) {
         return bookService.findBooksByNotDeleted()
     }
 
-    @GetMapping("/{keyword}")
-    fun bookListByKeyword(@PathVariable @Validated @NotBlank(message = "キーワードの入力は必須です") keyword: String): BookListDto {
+    @GetMapping("/keyword={keyword}")
+    fun bookListByKeyword(@PathVariable("keyword") @Validated @NotBlank(message = "キーワードの入力は必須です") keyword: String): BookListDto {
         return bookService.findBooksByKeyword(keyword)
     }
 

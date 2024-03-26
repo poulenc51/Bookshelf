@@ -3,7 +3,6 @@ package com.api.bookshelf.controller
 import com.api.bookshelf.dto.request.AddAuthorDto
 import com.api.bookshelf.dto.request.DeleteAuthorDto
 import com.api.bookshelf.dto.request.UpdateAuthorDto
-import com.api.bookshelf.dto.response.AuthorBooksListDto
 import com.api.bookshelf.dto.response.AuthorListDto
 import com.api.bookshelf.service.AuthorService
 import jakarta.validation.constraints.NotBlank
@@ -25,14 +24,9 @@ class AuthorController(private val authorService: AuthorService) {
         return authorService.findAuthorsByNotDeleted()
     }
 
-    @GetMapping("/{keyword}")
-    fun authorListByKeyword(@PathVariable @Validated @NotBlank(message = "キーワードの入力は必須です") keyword: String): AuthorListDto {
+    @GetMapping("/keyword={keyword}")
+    fun authorListByKeyword(@PathVariable("keyword") @Validated @NotBlank(message = "キーワードの入力は必須です") keyword: String): AuthorListDto {
         return authorService.findAuthorByKeyword(keyword)
-    }
-
-    @GetMapping("/books")
-    fun authorWithBooksList(): AuthorBooksListDto {
-        return authorService.findAuthorWithBooksAndNotDeleted()
     }
 
     @PostMapping("/add")

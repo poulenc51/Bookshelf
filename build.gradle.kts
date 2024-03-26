@@ -32,6 +32,11 @@ dependencies {
 	implementation("org.postgresql:postgresql")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
+	testImplementation("org.assertj:assertj-core:3.25.3")
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
+
 	// jOOQ
 	jooqGenerator("org.postgresql:postgresql:42.7.2")
 	jooqGenerator("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
@@ -45,7 +50,7 @@ jooq {
 			generateSchemaSourceOnCompilation.set(true)
 			jooqConfiguration.apply {
 				jdbc.apply {
-					url = "jdbc:postgresql://localhost:5432/bookshelf"
+					url = "jdbc:postgresql://localhost:5432/main"
 					user = "postgres"
 					password = "postgres"
 				}

@@ -6,22 +6,24 @@ import com.api.bookshelf.domain.repository.AuthorRepository
 import com.api.bookshelf.dto.request.AddAuthorDto
 import com.api.bookshelf.dto.request.DeleteAuthorDto
 import com.api.bookshelf.dto.request.UpdateAuthorDto
-import com.api.bookshelf.dto.response.AuthorBooksDto
-import com.api.bookshelf.dto.response.AuthorBooksListDto
 import com.api.bookshelf.dto.response.AuthorDto
 import com.api.bookshelf.dto.response.AuthorListDto
-import com.api.bookshelf.dto.response.BookDto
 import org.jooq.postgresql.generated.tables.records.AuthorRecord
 import org.springframework.stereotype.Service
 
 @Service
 class AuthorService(private val authorRepository: AuthorRepository) {
 
-    fun findAuthorById(id: Int): AuthorDto {
+    fun findAuthorById(id: Int): AuthorDto? {
         val author = authorRepository.findById(id)
-        return AuthorDto(
-            id = author.id, name = author.name, description = author.description
-        )
+        if(author != null) {
+            return AuthorDto(
+                id = author.id, name = author.name, description = author.description
+            )
+        }
+        else {
+            return null
+        }
     }
 
     fun findAuthorByKeyword(keyword: String): AuthorListDto {
@@ -38,27 +40,6 @@ class AuthorService(private val authorRepository: AuthorRepository) {
                 id = author.id, name = author.name, description = author.description
             )
         })
-    }
-
-    fun findAuthorWithBooksAndNotDeleted(): AuthorBooksListDto {
-        return AuthorBooksListDto(
-            authorBooksList = authorRepository.findAllAuthorsWithBooks().map { authorWithBooks ->
-                AuthorBooksDto(
-                    id = authorWithBooks.id,
-                    name = authorWithBooks.name,
-                    description = authorWithBooks.description,
-                    books = authorWithBooks.books.map { book ->
-                        BookDto(
-                            id = book.id,
-                            authorId = authorWithBooks.id,
-                            title = book.title,
-                            publicationDate = book.publicationDate
-                        )
-                    }
-                )
-            }
-        )
-
     }
 
     fun addAuthor(addAuthorDto: AddAuthorDto) {

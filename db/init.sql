@@ -1,9 +1,9 @@
 CREATE USER docker;
 
 -- Main用DB
-CREATE DATABASE bookshelf;
-GRANT ALL PRIVILEGES ON DATABASE bookshelf TO docker;
-\c bookshelf
+CREATE DATABASE main;
+GRANT ALL PRIVILEGES ON DATABASE main TO docker;
+\c main
 
 -- 書籍テーブル
 CREATE TABLE IF NOT EXISTS book (

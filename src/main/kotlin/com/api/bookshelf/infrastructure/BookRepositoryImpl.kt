@@ -28,7 +28,7 @@ class BookRepositoryImpl(
         return dslContext
             .select()
             .from(BOOK)
-            .where(BOOK.TITLE.eq("%$keyword%"))
+            .where(BOOK.TITLE.like("%$keyword%"))
             .and(BOOK.IS_DELETED.eq(`NOT DELETED`))
             .fetch().map { toModel(it) }
     }
