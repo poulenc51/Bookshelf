@@ -8,13 +8,23 @@ import com.api.bookshelf.dto.request.DeleteBookDto
 import com.api.bookshelf.dto.request.UpdateBookDto
 import com.api.bookshelf.dto.response.BookDto
 import com.api.bookshelf.dto.response.BookListDto
-import net.sf.jsqlparser.statement.select.First.Keyword
 import org.jooq.postgresql.generated.tables.records.BookRecord
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
 @Service
 class BookService(private val bookRepository: BookRepository) {
+
+    fun findBookById(id: Int): BookDto? {
+        val book = bookRepository.findById(id)
+        return if (book != null) {
+            BookDto(
+                id = book.id, title = book.title, authorId = book.authorId, publicationDate = book.publicationDate
+            )
+        } else {
+            null
+        }
+    }
 
     fun findBooksByNotDeleted(): BookListDto {
         return BookListDto(bookList = bookRepository.findAllByNotDeleted().map { book: Book ->
@@ -24,7 +34,7 @@ class BookService(private val bookRepository: BookRepository) {
         })
     }
 
-    fun findBooksByKeyword(keyword: String): BookListDto{
+    fun findBooksByKeyword(keyword: String): BookListDto {
         return BookListDto(bookList = bookRepository.findByKeyword(keyword).map { book: Book ->
             BookDto(
                 id = book.id, title = book.title, authorId = book.authorId, publicationDate = book.publicationDate

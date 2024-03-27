@@ -8,7 +8,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 
 private const val `NOT DELETED`: Boolean = com.api.bookshelf.constants.Constants.Sql.NotDeleted
@@ -16,7 +15,6 @@ private const val `IS DELETED`: Boolean = com.api.bookshelf.constants.Constants.
 
 
 @SpringBootTest
-@Import(AuthorRepositoryImpl::class)
 @ActiveProfiles("test")
 class FindByKeywordTest {
 
@@ -50,7 +48,7 @@ class FindByKeywordTest {
         val result = authorRepository.findByKeyword(keyword)
 
         assertThat(result).isNotEmpty
-        assertThat(result).anyMatch{ it.name.contains("Test")}
+        assertThat(result).anyMatch { it.name.contains("Test") }
         assertThat(result.size).isEqualTo(2)
     }
 
