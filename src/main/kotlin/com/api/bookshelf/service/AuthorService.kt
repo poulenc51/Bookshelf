@@ -10,10 +10,12 @@ import com.api.bookshelf.dto.response.AuthorDto
 import com.api.bookshelf.dto.response.AuthorListDto
 import org.jooq.postgresql.generated.tables.records.AuthorRecord
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AuthorService(private val authorRepository: AuthorRepository) {
 
+    @Transactional(readOnly = true)
     fun findAuthorById(id: Int): AuthorDto? {
         val author = authorRepository.findById(id)
         return if (author != null) {
@@ -25,6 +27,7 @@ class AuthorService(private val authorRepository: AuthorRepository) {
         }
     }
 
+    @Transactional(readOnly = true)
     fun findAuthorByKeyword(keyword: String): AuthorListDto {
         return AuthorListDto(authorList = authorRepository.findByKeyword(keyword).map { author: Author ->
             AuthorDto(
@@ -33,6 +36,7 @@ class AuthorService(private val authorRepository: AuthorRepository) {
         })
     }
 
+    @Transactional(readOnly = true)
     fun findAuthorsByNotDeleted(): AuthorListDto {
         return AuthorListDto(authorList = authorRepository.findAllByNotDeleted().map { author: Author ->
             AuthorDto(
@@ -41,6 +45,7 @@ class AuthorService(private val authorRepository: AuthorRepository) {
         })
     }
 
+    @Transactional
     fun addAuthor(addAuthorDto: AddAuthorDto) {
         authorRepository.saveAuthor(
             AuthorRecord(
@@ -50,6 +55,7 @@ class AuthorService(private val authorRepository: AuthorRepository) {
         )
     }
 
+    @Transactional
     fun updateBook(updateAuthorDto: UpdateAuthorDto) {
         authorRepository.saveAuthor(
             AuthorRecord(
@@ -61,6 +67,7 @@ class AuthorService(private val authorRepository: AuthorRepository) {
         )
     }
 
+    @Transactional
     fun deleteAuthor(deleteAuthorDto: DeleteAuthorDto) {
         val author = authorRepository.findById(deleteAuthorDto.id)
         if (author != null) {

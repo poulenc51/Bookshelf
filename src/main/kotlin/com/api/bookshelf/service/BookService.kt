@@ -10,11 +10,13 @@ import com.api.bookshelf.dto.response.BookDto
 import com.api.bookshelf.dto.response.BookListDto
 import org.jooq.postgresql.generated.tables.records.BookRecord
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
 class BookService(private val bookRepository: BookRepository) {
 
+    @Transactional(readOnly = true)
     fun findBookById(id: Int): BookDto? {
         val book = bookRepository.findById(id)
         return if (book != null) {
@@ -26,6 +28,7 @@ class BookService(private val bookRepository: BookRepository) {
         }
     }
 
+    @Transactional(readOnly = true)
     fun findBooksByNotDeleted(): BookListDto {
         return BookListDto(bookList = bookRepository.findAllByNotDeleted().map { book: Book ->
             BookDto(
@@ -34,6 +37,7 @@ class BookService(private val bookRepository: BookRepository) {
         })
     }
 
+    @Transactional(readOnly = true)
     fun findBooksByKeyword(keyword: String): BookListDto {
         return BookListDto(bookList = bookRepository.findByKeyword(keyword).map { book: Book ->
             BookDto(
@@ -42,6 +46,7 @@ class BookService(private val bookRepository: BookRepository) {
         })
     }
 
+    @Transactional(readOnly = true)
     fun findBooksByAuthorIdAndNotDeleted(authorId: Int): BookListDto {
         return BookListDto(bookList = bookRepository.findAllByAuthorIdAndNotDeleted(authorId).map { book: Book ->
             BookDto(
@@ -50,6 +55,7 @@ class BookService(private val bookRepository: BookRepository) {
         })
     }
 
+    @Transactional
     fun addBook(addBookDto: AddBookDto) {
         bookRepository.saveBook(
             BookRecord(
@@ -60,6 +66,7 @@ class BookService(private val bookRepository: BookRepository) {
         )
     }
 
+    @Transactional
     fun updateBook(updateBookDto: UpdateBookDto) {
         bookRepository.saveBook(
             BookRecord(
@@ -72,6 +79,7 @@ class BookService(private val bookRepository: BookRepository) {
         )
     }
 
+    @Transactional
     fun deleteBook(deleteBookDto: DeleteBookDto) {
         val book = bookRepository.findById(deleteBookDto.id)
         if (book != null) {
