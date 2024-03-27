@@ -1,4 +1,5 @@
 import nu.studer.gradle.jooq.JooqEdition
+import org.jetbrains.kotlin.cli.jvm.main
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -21,37 +22,43 @@ repositories {
 }
 
 dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-jooq")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jooq:jooq")
-	runtimeOnly("com.h2database:h2")
+	implementation("org.postgresql:postgresql")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
+	testImplementation("org.assertj:assertj-core:3.25.3")
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
+
 	// jOOQ
-	jooqGenerator("com.h2database:h2")
+	jooqGenerator("org.postgresql:postgresql:42.7.2")
 	jooqGenerator("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
 }
 
 jooq {
-	version.set("3.18.13")
+	version.set("3.17.22")
 	edition.set(JooqEdition.OSS)
 	configurations {
 		create("main") {
+			generateSchemaSourceOnCompilation.set(true)
 			jooqConfiguration.apply {
 				jdbc.apply {
-					driver = "org.h2.Driver"
-					url = "jdbc:h2:file:./build/h2/testdb;IFEXISTS=TRUE"
-					user = "sa"
-					password = ""
+					url = "jdbc:postgresql://localhost:5432/main"
+					user = "postgres"
+					password = "postgres"
 				}
 				generator.apply {
 					name = "org.jooq.codegen.KotlinGenerator"
 					database.apply {
-						name = "org.jooq.meta.h2.H2Database"
-						inputSchema = "PUBLIC"
+						name = "org.jooq.meta.postgres.PostgresDatabase"
+						inputSchema = "public"
 						includes = ".*"
 					}
 					generate.apply {
@@ -62,7 +69,7 @@ jooq {
 						isFluentSetters = true
 					}
 					target.apply {
-						packageName = "org.jooq.h2.generated"
+						packageName = "org.jooq.postgresql.generated"
 						directory = "build/generated-sources/jooq/db"
 					}
 				}
@@ -80,10 +87,4 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
-}
-
-tasks.named("generateJooq").configure {
-	if (!file("./build/h2/testdb.mv.db").exists()) {
-		enabled = false
-	}
 }

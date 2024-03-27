@@ -2,10 +2,10 @@ spring:
   application:
     name: bookshelf
   profiles:
-    active: local
+    active: test
 
   # H2 Database
   datasource:
-    url: jdbc:postgresql://localhost:5432/main
+    url: jdbc:postgresql://localhost:5432/test
     username: postgres
     password: postgres
