@@ -1,13 +1,10 @@
 package com.api.bookshelf.dto.request
 
-import com.api.bookshelf.service.AuthorService
 import com.fasterxml.jackson.annotation.JsonProperty
-import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
-import org.springframework.beans.factory.annotation.Autowired
 
 data class UpdateAuthorDto(
 
@@ -25,4 +22,4 @@ data class UpdateAuthorDto(
     @field:JsonProperty("description", required = true)
     val description: String,
 
-)
+    )

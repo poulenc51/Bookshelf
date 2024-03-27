@@ -70,6 +70,7 @@ class AuthorController(private val authorService: AuthorService) {
         authorService.deleteAuthor(deleteAuthorDto)
 
         return ResponseEntity.ok("post:$deleteAuthorDto")
+
     }
 
 }

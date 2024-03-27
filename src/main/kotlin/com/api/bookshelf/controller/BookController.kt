@@ -8,6 +8,7 @@ import com.api.bookshelf.service.AuthorService
 import com.api.bookshelf.service.BookService
 import jakarta.validation.constraints.NotBlank
 import org.springframework.http.ResponseEntity
+
 import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 import org.springframework.validation.annotation.Validated
@@ -88,6 +89,7 @@ class BookController(private val bookService: BookService, private val authorSer
         bookService.deleteBook(deleteBookDto)
 
         return ResponseEntity.ok("post:$deleteBookDto")
+
     }
 
 }
