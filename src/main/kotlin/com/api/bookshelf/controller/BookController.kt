@@ -7,8 +7,7 @@ import com.api.bookshelf.dto.response.BookListDto
 import com.api.bookshelf.service.AuthorService
 import com.api.bookshelf.service.BookService
 import jakarta.validation.constraints.NotBlank
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Import
+import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 import org.springframework.validation.annotation.Validated
@@ -41,20 +40,24 @@ class BookController(private val bookService: BookService, private val authorSer
     @PostMapping("/add")
     fun addBook(
         @RequestBody @Validated addBookDto: AddBookDto, bindingResult: BindingResult
-    ): String {
+    ): ResponseEntity<Any> {
         if (authorService.findAuthorById(addBookDto.authorId) == null) {
             bindingResult.addError(FieldError("addBookDto", "authorId", "存在しない著者IDです"))
         }
         if (bindingResult.hasErrors()) {
-            return bindingResult.allErrors.toString()
+            val errors = bindingResult.allErrors.map { it.defaultMessage }.joinToString(", ")
+            return ResponseEntity.badRequest().body(errors)
         }
         bookService.addBook(addBookDto)
 
-        return "post:$addBookDto"
+        return ResponseEntity.ok("post:$addBookDto")
     }
 
     @PostMapping("/update")
-    fun updateBook(@RequestBody @Validated updateBookDto: UpdateBookDto, bindingResult: BindingResult): String {
+    fun updateBook(
+        @RequestBody @Validated updateBookDto: UpdateBookDto,
+        bindingResult: BindingResult
+    ): ResponseEntity<Any> {
         if (bookService.findBookById(updateBookDto.id) == null) {
             bindingResult.addError(FieldError("updateBookDto", "id", "存在しない書籍IDです"))
         }
@@ -62,24 +65,29 @@ class BookController(private val bookService: BookService, private val authorSer
             bindingResult.addError(FieldError("updateBookDto", "authorId", "存在しない著者IDです"))
         }
         if (bindingResult.hasErrors()) {
-            return bindingResult.allErrors.toString()
+            val errors = bindingResult.allErrors.map { it.defaultMessage }.joinToString(", ")
+            return ResponseEntity.badRequest().body(errors)
         }
         bookService.updateBook(updateBookDto)
 
-        return "post:$updateBookDto"
+        return ResponseEntity.ok("post:$updateBookDto")
     }
 
     @PostMapping("/delete")
-    fun deleteBook(@RequestBody @Validated deleteBookDto: DeleteBookDto, bindingResult: BindingResult): String {
+    fun deleteBook(
+        @RequestBody @Validated deleteBookDto: DeleteBookDto,
+        bindingResult: BindingResult
+    ): ResponseEntity<Any> {
         if (bookService.findBookById(deleteBookDto.id) == null) {
             bindingResult.addError(FieldError("deleteBookDto", "id", "存在しない書籍IDです"))
         }
         if (bindingResult.hasErrors()) {
-            return bindingResult.allErrors.toString()
+            val errors = bindingResult.allErrors.map { it.defaultMessage }.joinToString(", ")
+            return ResponseEntity.badRequest().body(errors)
         }
         bookService.deleteBook(deleteBookDto)
 
-        return "post:$deleteBookDto"
+        return ResponseEntity.ok("post:$deleteBookDto")
     }
 
 }
