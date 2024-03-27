@@ -7,6 +7,7 @@ import com.api.bookshelf.dto.response.AuthorListDto
 import com.api.bookshelf.service.AuthorService
 import jakarta.validation.constraints.NotBlank
 import org.springframework.validation.BindingResult
+import org.springframework.validation.FieldError
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -43,6 +44,9 @@ class AuthorController(private val authorService: AuthorService) {
 
     @PostMapping("/update")
     fun updateAuthor(@RequestBody @Validated updateAuthorDto: UpdateAuthorDto, bindingResult: BindingResult): String {
+        if (authorService.findAuthorById(updateAuthorDto.id) == null) {
+            bindingResult.addError(FieldError("addBookDto", "authorId", "存在しない著者IDです"))
+        }
         if (bindingResult.hasErrors()) {
             return bindingResult.allErrors.toString()
         }
@@ -53,6 +57,9 @@ class AuthorController(private val authorService: AuthorService) {
 
     @PostMapping("/delete")
     fun deleteBook(@RequestBody @Validated deleteAuthorDto: DeleteAuthorDto, bindingResult: BindingResult): String {
+        if (authorService.findAuthorById(deleteAuthorDto.id) == null) {
+            bindingResult.addError(FieldError("addBookDto", "authorId", "存在しない著者IDです"))
+        }
         if (bindingResult.hasErrors()) {
             return bindingResult.allErrors.toString()
         }

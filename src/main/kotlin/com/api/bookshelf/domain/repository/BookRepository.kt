@@ -2,8 +2,10 @@ package com.api.bookshelf.domain.repository
 
 import com.api.bookshelf.domain.model.Book
 import org.jooq.postgresql.generated.tables.records.BookRecord
+import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
+@Repository
 interface BookRepository {
 
     fun findById(id: Int): Book?
