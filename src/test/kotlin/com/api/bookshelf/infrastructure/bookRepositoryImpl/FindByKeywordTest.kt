@@ -1,5 +1,6 @@
 package com.api.bookshelf.infrastructure.bookRepositoryImpl
 
+import com.api.bookshelf.domain.model.Book
 import com.api.bookshelf.infrastructure.BookRepositoryImpl
 import org.assertj.core.api.Assertions
 import org.jooq.DSLContext
@@ -62,6 +63,33 @@ class FindByKeywordTest {
 
     @Test
     fun `findByKeyword should return list of Books when keyword is not found`() {
+        setupTestData()
+
+        val keyword = "NonExistingKeyword"
+
+        val result = bookRepository.findByKeyword(keyword)
+
+        Assertions.assertThat(result).isEmpty()
+    }
+
+    @Test
+    fun `findByKeyword should return the expected list of books when the keyword is found`() {
+        setupTestData()
+
+        val keyword = "Test"
+        val expectedBooks = listOf(
+            Book(1, "Test Book 1", 1, LocalDate.parse("2000-01-01"), `NOT DELETED`),
+            Book(2, "Test Book 2", 2, LocalDate.parse("2000-01-01"), `NOT DELETED`),
+            Book(3, "Test Book 3", 3, LocalDate.parse("2000-01-01"), `NOT DELETED`)
+        )
+
+        val result = bookRepository.findByKeyword(keyword)
+
+        Assertions.assertThat(result).isEqualTo(expectedBooks)
+    }
+
+    @Test
+    fun `findByKeyword should return an empty list when the keyword is not found`() {
         setupTestData()
 
         val keyword = "NonExistingKeyword"

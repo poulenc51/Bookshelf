@@ -62,4 +62,30 @@ class FindByKeywordTest {
 
         assertThat(result).isEmpty()
     }
+
+    @Test
+    fun `findByKeyword should return the expected list of authors when the keyword is found`() {
+        setupTestData()
+
+        val keyword = "Test"
+        val expectedAuthors = listOf(
+            Author(1, "Test Author 1", "説明1", `NOT DELETED`),
+            Author(2, "Test Author 2", "説明2", `NOT DELETED`)
+        )
+
+        val result = authorRepository.findByKeyword(keyword)
+
+        assertThat(result).isEqualTo(expectedAuthors)
+    }
+
+    @Test
+    fun `findByKeyword should return an empty list when the keyword is not found`() {
+        setupTestData()
+
+        val keyword = "NonExistingKeyword"
+
+        val result = authorRepository.findByKeyword(keyword)
+
+        assertThat(result).isEmpty()
+    }
 }

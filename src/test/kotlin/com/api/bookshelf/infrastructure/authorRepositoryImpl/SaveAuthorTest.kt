@@ -41,7 +41,7 @@ class SaveAuthorTest {
     }
 
     @Test
-    fun `saveBook should insert new record when id is null`() {
+    fun `saveAuthor should insert new record when id is null`() {
         setupTestData()
 
         val newAuthor = AuthorRecord(null, "New Author", "New Description")
@@ -60,7 +60,7 @@ class SaveAuthorTest {
     }
 
     @Test
-    fun `saveBook should update existing record when id is not null`() {
+    fun `saveAuthor should update existing record when id is not null`() {
         setupTestData()
 
         val existingAuthor = AuthorRecord(1, "Existing Author", "Updated Description", `NOT DELETED`)
@@ -79,7 +79,7 @@ class SaveAuthorTest {
     }
 
     @Test
-    fun `saveBook should logic delete existing record when id is not null`() {
+    fun `saveAuthor should logic delete existing record when id is not null`() {
         setupTestData()
 
         val deletingAuthor = AuthorRecord(1, "Deleting Author", "Deleting Description", `IS DELETED`)
