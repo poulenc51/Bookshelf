@@ -6,6 +6,7 @@ import com.api.bookshelf.service.AuthorService
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -101,4 +102,33 @@ class AddAuthorTest {
             .andExpect(content().string("説明は1000文字以内で入力してください"))
     }
 
+    @Test
+    fun `addAuthor method in AuthorController calls addAuthor method in AuthorService`() {
+        val authorDto = AddAuthorDto(name = "テスト 太郎", description = "テスト説明")
+        val authorJson = objectMapper.writeValueAsString(authorDto)
+
+        mockMvc.perform(
+            post("/author/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(authorJson)
+        )
+            .andExpect(status().isOk)
+
+        verify(authorService).addAuthor(authorDto)
+    }
+
+    @Test
+    fun `addAuthor method in AuthorController returns expected response when addAuthor method in AuthorService is called`() {
+        val authorDto = AddAuthorDto(name = "テスト 太郎", description = "テスト説明")
+        val authorJson = objectMapper.writeValueAsString(authorDto)
+        val expectedResponse = "post:AddAuthorDto(name=テスト 太郎, description=テスト説明)"
+
+        mockMvc.perform(
+            post("/author/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(authorJson)
+        )
+            .andExpect(status().isOk)
+            .andExpect(content().string(expectedResponse))
+    }
 }

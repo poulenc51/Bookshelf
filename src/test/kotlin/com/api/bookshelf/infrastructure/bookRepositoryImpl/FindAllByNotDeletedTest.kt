@@ -1,5 +1,6 @@
 package com.api.bookshelf.infrastructure.bookRepositoryImpl
 
+import com.api.bookshelf.domain.model.Book
 import com.api.bookshelf.infrastructure.BookRepositoryImpl
 import org.assertj.core.api.Assertions
 import org.jooq.DSLContext
@@ -55,5 +56,21 @@ class FindAllByNotDeletedTest {
 
         Assertions.assertThat(result).isNotEmpty
         Assertions.assertThat(result.size).isEqualTo(4)
+    }
+
+    @Test
+    fun `findAllByNotDeleted should return the expected list of books`() {
+        setupTestData()
+
+        val expectedBooks = listOf(
+            Book(1, "Test Book 1", 1, LocalDate.parse("2000-01-01"), `NOT DELETED`),
+            Book(2, "Test Book 2", 2, LocalDate.parse("2000-01-01"), `NOT DELETED`),
+            Book(3, "Test Book 3", 3, LocalDate.parse("2000-01-01"), `NOT DELETED`),
+            Book(4, "Test Book 4", 2, LocalDate.parse("2000-01-01"), `NOT DELETED`)
+        )
+
+        val result = bookRepository.findAllByNotDeleted()
+
+        Assertions.assertThat(result).isEqualTo(expectedBooks)
     }
 }

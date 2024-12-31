@@ -1,5 +1,6 @@
 package com.api.bookshelf.infrastructure.authorRepositoryImpl
 
+import com.api.bookshelf.domain.model.Author
 import com.api.bookshelf.infrastructure.AuthorRepositoryImpl
 import org.assertj.core.api.Assertions
 import org.jooq.DSLContext
@@ -46,5 +47,20 @@ class FindAllByNotDeletedTest {
 
         Assertions.assertThat(result).isNotEmpty
         Assertions.assertThat(result.size).isEqualTo(3)
+    }
+
+    @Test
+    fun `findAllByNotDeleted should return the expected list of authors`() {
+        setupTestData()
+
+        val expectedAuthors = listOf(
+            Author(1, "Test Author 1", "説明1", `NOT DELETED`),
+            Author(2, "Test Author 2", "説明2", `NOT DELETED`),
+            Author(4, "テスト 著者 4", "説明3", `NOT DELETED`)
+        )
+
+        val result = authorRepository.findAllByNotDeleted()
+
+        Assertions.assertThat(result).isEqualTo(expectedAuthors)
     }
 }
